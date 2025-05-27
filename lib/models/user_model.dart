@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add this import
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppUser {
   final String uid;
@@ -24,6 +24,12 @@ class AppUser {
   }
 
   Map<String, dynamic> toMap() {
-    return {'uid': uid, 'email': email, 'fullName': fullName, 'role': role};
+    return {
+      'uid': uid,
+      'email': email,
+      'fullName': fullName,
+      'role': role,
+      'createdAt': FieldValue.serverTimestamp(),
+    };
   }
 }

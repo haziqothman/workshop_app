@@ -31,18 +31,18 @@ class RatingsListScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final rating = ratings[index];
               return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                margin: const EdgeInsets.all(8),
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.amber[100],
                     child: Text(
                       rating.stars.toString(),
-                      style: const TextStyle(color: Colors.amber),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
-                  title: Text(
-                    rating.comment.isNotEmpty ? rating.comment : 'No comment',
-                  ),
+                  title: Text(rating.comment.isNotEmpty 
+                      ? rating.comment 
+                      : 'No comment provided'),
                   subtitle: Text(
                     'From ${rating.role == 'foreman' ? 'Foreman' : 'Workshop Owner'} • '
                     '${rating.createdAt.toString().substring(0, 10)}',

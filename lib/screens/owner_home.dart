@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../services/rating_service.dart';
 import '../screens/rating_screen.dart';
 import '../models/user_model.dart';
+import 'ratings_list_screen.dart'; // Add this import
+import '../auth/auth_service.dart';
 
 class OwnerHome extends StatefulWidget {
   const OwnerHome({super.key});
@@ -122,7 +124,7 @@ class _OwnerHomeState extends State<OwnerHome> {
     // In a real app, you'd get this from your jobs data
     const foremanId = 'foreman123';
     const foremanName = 'John Foreman';
-    const jobId = 'job$jobIndex';
+    final jobId = 'job_$jobIndex'; // Added underscore for better readability
 
     Navigator.push(
       context,

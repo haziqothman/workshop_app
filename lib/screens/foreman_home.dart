@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/rating_service.dart';
 import '../auth/auth_service.dart';
 import 'ratings_list_screen.dart';
+import 'rating_screen.dart'; // Add this import
 
 class ForemanHome extends StatefulWidget {
   const ForemanHome({super.key});
