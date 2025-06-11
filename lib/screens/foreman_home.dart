@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/rating_service.dart';
 import '../auth/auth_service.dart';
 import 'ratings_list_screen.dart';
-import 'rating_screen.dart'; // Add this import
+import 'rating_screen.dart';
 
 class ForemanHome extends StatefulWidget {
   const ForemanHome({super.key});
@@ -117,10 +117,10 @@ class _ForemanHomeState extends State<ForemanHome> {
   }
 
   void _rateWorkshopOwner(int jobIndex) {
-    final jobId =
-        'job$jobIndex'; // Remove const since it's not a constant expression
+    final jobId = 'job$jobIndex';
     const ownerId = 'owner123';
     const ownerName = 'Workshop Owner';
+    final jobTitle = 'Job ${jobIndex + 1}';
 
     Navigator.push(
       context,
@@ -128,9 +128,10 @@ class _ForemanHomeState extends State<ForemanHome> {
         builder:
             (_) => RatingScreen(
               jobId: jobId,
-              toUserId: ownerId,
-              toUserName: ownerName,
+              ratedUserId: ownerId,
+              ratedUserName: ownerName,
               role: 'owner',
+              jobTitle: jobTitle,
             ),
       ),
     ).then((_) => _loadRatings());

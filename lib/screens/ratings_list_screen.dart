@@ -40,9 +40,11 @@ class RatingsListScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),
-                  title: Text(rating.comment.isNotEmpty 
-                      ? rating.comment 
-                      : 'No comment provided'),
+                  title: Text(
+                    rating.comment.isNotEmpty
+                        ? rating.comment
+                        : 'No comment provided',
+                  ),
                   subtitle: Text(
                     'From ${rating.role == 'foreman' ? 'Foreman' : 'Workshop Owner'} • '
                     '${rating.createdAt.toString().substring(0, 10)}',

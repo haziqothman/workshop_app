@@ -5,45 +5,51 @@ class Rating {
   final String fromUserId;
   final String toUserId;
   final String jobId;
+  final String jobTitle;
   final int stars;
   final String comment;
   final DateTime createdAt;
-  final String role; // 'foreman' or 'owner'
+  final String role;
 
   Rating({
     required this.id,
     required this.fromUserId,
     required this.toUserId,
     required this.jobId,
+    required this.jobTitle,
     required this.stars,
     required this.comment,
     required this.createdAt,
     required this.role,
   });
 
-  factory Rating.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final data = doc.data()!;
-    return Rating(
-      id: doc.id,
-      fromUserId: data['fromUserId'] ?? '',
-      toUserId: data['toUserId'] ?? '',
-      jobId: data['jobId'] ?? '',
-      stars: data['stars'] ?? 0,
-      comment: data['comment'] ?? '',
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      role: data['role'] ?? 'foreman',
-    );
-  }
-
+  // Add fromFirestore and toMap methods if you need them
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'fromUserId': fromUserId,
       'toUserId': toUserId,
       'jobId': jobId,
+      'jobTitle': jobTitle,
       'stars': stars,
       'comment': comment,
-      'createdAt': Timestamp.fromDate(createdAt),
+      'createdAt': createdAt.toIso8601String(),
       'role': role,
     };
+  }
+
+  factory Rating.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Rating(
+      id: doc.id,
+      fromUserId: data['fromUserId'],
+      toUserId: data['toUserId'],
+      jobId: data['jobId'],
+      jobTitle: data['jobTitle'],
+      stars: data['stars'],
+      comment: data['comment'],
+      createdAt: DateTime.parse(data['createdAt']),
+      role: data['role'],
+    );
   }
 }

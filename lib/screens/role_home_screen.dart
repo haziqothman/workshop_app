@@ -17,7 +17,7 @@ class RoleHomeScreen extends StatelessWidget {
     }
 
     return user.uid.startsWith('workshop_owner')
-        ? const WorkshopOwnerHome()
+        ? const OwnerHome()
         : const ForemanHome();
   }
 }

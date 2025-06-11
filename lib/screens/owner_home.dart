@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/rating_service.dart';
-import '../screens/rating_screen.dart';
-import '../models/user_model.dart';
-import 'ratings_list_screen.dart'; // Add this import
 import '../auth/auth_service.dart';
+import 'ratings_list_screen.dart';
+import 'rating_screen.dart';
 
 class OwnerHome extends StatefulWidget {
   const OwnerHome({super.key});
@@ -55,7 +54,6 @@ class _OwnerHomeState extends State<OwnerHome> {
       ),
       body: Column(
         children: [
-          // Rating Display
           Card(
             margin: const EdgeInsets.all(16),
             child: Padding(
@@ -82,18 +80,16 @@ class _OwnerHomeState extends State<OwnerHome> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: () => _viewAllRatings(),
+                    onPressed: _viewAllRatings,
                     child: const Text('View All Ratings'),
                   ),
                 ],
               ),
             ),
           ),
-
-          // Example job completion section
           Expanded(
             child: ListView.builder(
-              itemCount: 5, // Replace with actual completed jobs
+              itemCount: 5,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text('Completed Job ${index + 1}'),
@@ -121,10 +117,10 @@ class _OwnerHomeState extends State<OwnerHome> {
   }
 
   void _rateForeman(int jobIndex) {
-    // In a real app, you'd get this from your jobs data
     const foremanId = 'foreman123';
     const foremanName = 'John Foreman';
-    final jobId = 'job_$jobIndex'; // Added underscore for better readability
+    final jobId = 'job_$jobIndex';
+    final jobTitle = 'Job ${jobIndex + 1}';
 
     Navigator.push(
       context,
@@ -132,9 +128,10 @@ class _OwnerHomeState extends State<OwnerHome> {
         builder:
             (_) => RatingScreen(
               jobId: jobId,
-              toUserId: foremanId,
-              toUserName: foremanName,
+              ratedUserId: foremanId,
+              ratedUserName: foremanName,
               role: 'foreman',
+              jobTitle: jobTitle,
             ),
       ),
     ).then((_) => _loadRatings());

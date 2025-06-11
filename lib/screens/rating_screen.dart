@@ -6,16 +6,18 @@ import '../models/rating.dart';
 
 class RatingScreen extends StatefulWidget {
   final String jobId;
-  final String toUserId;
-  final String toUserName;
+  final String ratedUserId;
+  final String ratedUserName;
   final String role;
+  final String jobTitle;
 
   const RatingScreen({
     super.key,
     required this.jobId,
-    required this.toUserId,
-    required this.toUserName,
+    required this.ratedUserId,
+    required this.ratedUserName,
     required this.role,
+    required this.jobTitle,
   });
 
   @override
@@ -29,13 +31,13 @@ class _RatingScreenState extends State<RatingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Rate ${widget.toUserName}')),
+      appBar: AppBar(title: Text('Rate ${widget.ratedUserName}')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(
-              'How was your experience with ${widget.toUserName}?',
+              'How was your experience with ${widget.ratedUserName} for job "${widget.jobTitle}"?',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
@@ -76,11 +78,23 @@ class _RatingScreenState extends State<RatingScreen> {
     final ratingService = Provider.of<RatingService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
 
+    // Check if user is authenticated
+    if (authService.currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You must be logged in to submit a rating'),
+        ),
+      );
+      return;
+    }
+
     final rating = Rating(
-      id: '${widget.jobId}_${authService.currentUser!.uid}',
+      id:
+          '${widget.jobId}_${authService.currentUser!.uid}_${DateTime.now().millisecondsSinceEpoch}',
       fromUserId: authService.currentUser!.uid,
-      toUserId: widget.toUserId,
+      toUserId: widget.ratedUserId,
       jobId: widget.jobId,
+      jobTitle: widget.jobTitle,
       stars: _rating,
       comment: _commentController.text,
       createdAt: DateTime.now(),
@@ -91,9 +105,9 @@ class _RatingScreenState extends State<RatingScreen> {
       await ratingService.submitRating(rating);
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to submit rating: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to submit rating: ${e.toString()}')),
+      );
     }
   }
 }
