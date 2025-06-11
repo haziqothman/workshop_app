@@ -33,10 +33,23 @@ class RatingService {
     return snapshot.docs.length;
   }
 
-  Stream<List<Rating>> getRatingsForUser(String userId) {
+  Stream<List<Rating>> getReceivedRatings(String userId) {
     return _firestore
         .collection('ratings')
         .where('toUserId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => Rating.fromFirestore(doc)).toList(),
+        );
+  }
+
+  Stream<List<Rating>> getGivenRatings(String userId) {
+    return _firestore
+        .collection('ratings')
+        .where('fromUserId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map(
           (snapshot) =>
