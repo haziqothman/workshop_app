@@ -16,7 +16,7 @@ class _OwnerHomeState extends State<OwnerHome> {
   double _averageRating = 0.0;
   int _ratingCount = 0;
   int _totalJobsCompleted = 0;
-  double _averageJobCompletionTime = 2.5; // in days
+  double _averageJobCompletionTime = 2.5;
   final List<Map<String, dynamic>> _completedJobs = [
     {
       'id': 'job1',
@@ -345,6 +345,7 @@ class _OwnerHomeState extends State<OwnerHome> {
             (_) => RatingsListScreen(
               userId: authService.currentUser!.uid,
               showReceivedRatings: true,
+              isOwnerView: true, // This enables the delete functionality
             ),
       ),
     );

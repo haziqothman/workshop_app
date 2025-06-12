@@ -27,6 +27,7 @@ class RatingScreen extends StatefulWidget {
 class _RatingScreenState extends State<RatingScreen> {
   int _rating = 0;
   final TextEditingController _commentController = TextEditingController();
+  bool _isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +66,11 @@ class _RatingScreenState extends State<RatingScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _rating == 0 ? null : _submitRating,
-              child: const Text('Submit Rating'),
+              onPressed: _rating == 0 || _isSubmitting ? null : _submitRating,
+              child:
+                  _isSubmitting
+                      ? const CircularProgressIndicator()
+                      : const Text('Submit Rating'),
             ),
           ],
         ),
@@ -75,16 +79,18 @@ class _RatingScreenState extends State<RatingScreen> {
   }
 
   Future<void> _submitRating() async {
+    setState(() => _isSubmitting = true);
+
     final ratingService = Provider.of<RatingService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
 
-    // Check if user is authenticated
     if (authService.currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('You must be logged in to submit a rating'),
         ),
       );
+      setState(() => _isSubmitting = false);
       return;
     }
 
@@ -103,11 +109,31 @@ class _RatingScreenState extends State<RatingScreen> {
 
     try {
       await ratingService.submitRating(rating);
-      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Your Rating successfully!'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 1500));
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to submit rating: ${e.toString()}')),
+        SnackBar(
+          content: Text('Failed to submit rating: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
       );
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
     }
   }
 }

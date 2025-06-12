@@ -56,4 +56,9 @@ class RatingService {
               snapshot.docs.map((doc) => Rating.fromFirestore(doc)).toList(),
         );
   }
+
+  // Add this new method for deleting ratings
+  Future<void> deleteRating(String ratingId) async {
+    await _firestore.collection('ratings').doc(ratingId).delete();
+  }
 }
